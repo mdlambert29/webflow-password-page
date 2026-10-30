@@ -1,5 +1,5 @@
 /*!
- * Zanger Digital password page v1.0.0
+ * Zanger Digital password page v1.1.0
  * Draws the review-page password screen over a Webflow site's native password (401) page and moves
  * Webflow's own password form into it, so login still goes through Webflow (POST /.wf_auth).
  * Self-contained: markup, styles and the logo are built in. The only outside requests are the two
@@ -11,8 +11,10 @@
  *
  * Options, as data-* attributes on the script tag or as window.ZDPassword = {...} set before it:
  *   slack     Link for "Message us in Slack".
- *   clickup   Link for the step 3 ClickUp task. With JS config it can also be an object keyed by
- *             protected page path, e.g. { "/pricing": "https://...", "*": "https://..." }.
+ *   clickup   Step 3 ClickUp link: a list (".../v/li/...", reads "Find the page's task in our
+ *             ClickUp list.") or a task (".../t/...", reads "In the page's ClickUp task.").
+ *             With JS config it can also be an object keyed by protected page path,
+ *             e.g. { "/pricing": "https://...", "*": "https://..." }.
  *             Without a link, step 3 reads "In the ClickUp task we sent you."
  *   tutorial  Link for "Watch the tutorial (6 min)". Defaults to the Superflow Loom.
  *   heading, subheading, error   Copy overrides.
@@ -22,7 +24,7 @@
   if (window.__zdPasswordPage) return;
   window.__zdPasswordPage = true;
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var FONTS = 'https://cdn.jsdelivr.net/npm/@fontsource/';
   var script = document.currentScript;
   var data = (script && script.dataset) || {};
@@ -109,7 +111,8 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
 #zdpw .zdpw-step-text{margin:.125rem 0 0;font-size:1rem;line-height:1.45;color:#A7ADBE}
 /* Links: 44px tall hit area without changing the layout */
 #zdpw .zdpw-link{display:inline-block;padding:.625rem 0;margin:-.625rem 0;font-weight:600;color:#8ABFF5;text-decoration:none;background:none}
-#zdpw .zdpw-step-text .zdpw-link{display:inline;padding:0;margin:0}
+#zdpw .zdpw-step-text{text-wrap:pretty}
+#zdpw .zdpw-step-text .zdpw-link{display:inline;padding:0;margin:0;white-space:nowrap}
 #zdpw .zdpw-link.is-video{display:inline-flex;align-items:center;gap:.375rem}
 #zdpw .zdpw-link.is-video svg{flex:none;width:16px;height:16px}
 
@@ -273,9 +276,15 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
     }
 
     var cu = slot('clickup');
-    if (cfg.clickup) {
+    // Wording follows the link: a task (/t/...), a list (/v/li/...) or any other ClickUp view
+    var cuPath = cfg.clickup ? new URL(cfg.clickup).pathname : '';
+    if (/^\/t\//.test(cuPath)) {
       cu.appendChild(document.createTextNode('In the page’s '));
       cu.appendChild(link(cfg.clickup, 'ClickUp task'));
+      cu.appendChild(document.createTextNode('.'));
+    } else if (cfg.clickup) {
+      cu.appendChild(document.createTextNode('Find the page’s task in our '));
+      cu.appendChild(link(cfg.clickup, /\/v\/li\//.test(cuPath) ? 'ClickUp list' : 'ClickUp'));
       cu.appendChild(document.createTextNode('.'));
     } else {
       cu.textContent = 'In the ClickUp task we sent you.';

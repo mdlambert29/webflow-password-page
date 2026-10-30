@@ -16,7 +16,7 @@ first element in the body, and paste:
 ```html
 <script src="https://cdn.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js"
   data-slack="https://zangerdigital.slack.com/archives/CLIENT_CHANNEL_ID"
-  data-clickup="https://app.clickup.com/t/TASK_ID"></script>
+  data-clickup="https://app.clickup.com/8666121/v/li/LIST_ID"></script>
 ```
 
 Publish. Every password-protected page on the site uses this one 401 page.
@@ -32,11 +32,11 @@ Set as `data-*` attributes on the script tag, or as `window.ZDPassword = {...}` 
 | Option | Default | What it does |
 | --- | --- | --- |
 | `slack` | `https://app.slack.com/client` | "Message us in Slack" link. |
-| `clickup` | none | Step 3 link: "In the page's ClickUp task." Without it, step 3 reads "In the ClickUp task we sent you." |
+| `clickup` | none | Step 3 link. A list link (`.../v/li/...`) reads "Find the page's task in our ClickUp list." A task link (`.../t/...`) reads "In the page's ClickUp task." Without it, step 3 reads "In the ClickUp task we sent you." |
 | `tutorial` | Superflow Loom | "Watch the tutorial (6 min)" link. |
 | `heading`, `subheading`, `error` | design copy | Copy overrides. |
 
-One 401 page serves every protected page on a site, so for different ClickUp tasks per page use the
+One 401 page serves every protected page on a site, so for different ClickUp lists or tasks per page use the
 JS form and map them by path (the protected page's URL stays in the address bar on the 401 page):
 
 ```html
@@ -44,9 +44,9 @@ JS form and map them by path (the protected page's URL stays in the address bar 
   window.ZDPassword = {
     slack: "https://zangerdigital.slack.com/archives/CLIENT_CHANNEL_ID",
     clickup: {
-      "/new-homepage": "https://app.clickup.com/t/AAA",
+      "/new-homepage": "https://app.clickup.com/8666121/v/li/AAA",
       "/pricing": "https://app.clickup.com/t/BBB",
-      "*": "https://app.clickup.com/t/FALLBACK"   // optional
+      "*": "https://app.clickup.com/8666121/v/li/FALLBACK"   // optional
     }
   };
 </script>
