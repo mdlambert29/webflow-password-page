@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- Mock of a Webflow password (401) page for local testing. The form markup is copied from a live
+     Webflow 401 page; the site styles below imitate a client site's global CSS to catch leaks. -->
+<html data-wf-page="694a1e5a90e92d0d44b830b6" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Protected page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* Bits of webflow.css the native form relies on */
+    .w-form-fail{display:none;margin-top:10px;padding:10px;background-color:#ffdede}
+    .w-input{display:block;width:100%;height:38px;padding:8px 12px;margin-bottom:10px;font-size:14px;color:#333;background:#fff;border:1px solid #ccc}
+    .w-button{display:inline-block;padding:9px 15px;background-color:#3898ec;color:#fff;border:0;border-radius:0;cursor:pointer}
+    /* A client site's global styles */
+    body{margin:0;font-family:Georgia,serif;background:#f4efe6;color:#222;letter-spacing:.04em}
+    h1,h2{text-transform:uppercase;font-size:4rem}
+    a{color:hotpink;text-decoration:underline}
+    p{margin-bottom:2rem}
+    label{text-transform:uppercase}
+    .utility-page_component{display:flex;min-height:100vh;align-items:center;justify-content:center}
+    .utility-page_wrapper{max-width:20rem;text-align:center}
+  </style>
+  <!-- Embed code, as it would sit on the 401 page -->
+  <script src="/zd-password.js"
+    data-slack="https://zangerdigital.slack.com/archives/C000TEST"
+    data-clickup="https://app.clickup.com/t/868m7pr6k"></script>
+</head>
+<body>
+  <div class="utility-page_component">
+    <div class="utility-page_wrapper w-password-page w-form">
+      <form action="/.wf_auth" method="post" id="email-form" name="email-form" data-name="Email Form" class="utility-page_form w-password-page">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'/%3E" alt="">
+        <h2>Protected Page</h2>
+        <label for="pass">Password</label>
+        <input class="form_input w-password-page w-input" autofocus="true" maxlength="256" name="pass" data-name="field" placeholder="Enter your password" type="password" id="pass">
+        <input type="submit" data-wait="Please wait..." class="button w-password-page w-button" value="Submit">
+        <div class="form_message-error w-password-page w-form-fail"><div>Incorrect password. Please try again.</div></div>
+        <div style="display:none" class="w-password-page w-embed w-script"><input type="hidden" name="path" value="/demo-protected"><input type="hidden" name="page" value="/demo-protected"></div>
+        <div style="display:none" class="w-password-page w-embed w-script"><script type="application/javascript">(function _handlePasswordPageOnload() {
+          if (/[?&]e=1(&|$)/.test(document.location.search)) {
+            document.querySelector('.w-password-page.w-form-fail').style.display = 'block';
+          }
+        })()</script></div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
