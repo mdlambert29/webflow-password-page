@@ -15,7 +15,6 @@ first element in the body, and paste:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js"
-  data-slack="https://zangerdigital.slack.com/archives/CLIENT_CHANNEL_ID"
   data-clickup="https://app.clickup.com/8666121/v/li/LIST_ID"></script>
 ```
 
@@ -31,8 +30,7 @@ Set as `data-*` attributes on the script tag, or as `window.ZDPassword = {...}` 
 
 | Option | Default | What it does |
 | --- | --- | --- |
-| `slack` | `https://app.slack.com/client` | "Message us in Slack" link. |
-| `clickup` | none | Step 3 link. A list link (`.../v/li/...`) reads "Find the page's task in our ClickUp list." A task link (`.../t/...`) reads "In the page's ClickUp task." Without it, step 3 reads "In the ClickUp task we sent you." |
+| `clickup` | `https://app.clickup.com/login` | Step 3 link. A list link (`.../v/li/...`) reads "Find the page's task in our ClickUp list." A task link (`.../t/...`) reads "In the page's ClickUp task." Any other link, including the default login page, reads "Find the page's task in ClickUp." |
 | `tutorial` | Superflow Loom | "Watch the tutorial (6 min)" link. |
 | `heading`, `subheading`, `error` | design copy | Copy overrides. |
 
@@ -42,11 +40,10 @@ JS form and map them by path (the protected page's URL stays in the address bar 
 ```html
 <script>
   window.ZDPassword = {
-    slack: "https://zangerdigital.slack.com/archives/CLIENT_CHANNEL_ID",
     clickup: {
       "/new-homepage": "https://app.clickup.com/8666121/v/li/AAA",
       "/pricing": "https://app.clickup.com/t/BBB",
-      "*": "https://app.clickup.com/8666121/v/li/FALLBACK"   // optional
+      "*": "https://app.clickup.com/8666121/v/li/FALLBACK"   // optional; otherwise the login page
     }
   };
 </script>

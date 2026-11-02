@@ -1,5 +1,5 @@
 /*!
- * Zanger Digital password page v1.1.0
+ * Zanger Digital password page v1.2.0
  * Draws the review-page password screen over a Webflow site's native password (401) page and moves
  * Webflow's own password form into it, so login still goes through Webflow (POST /.wf_auth).
  * Self-contained: markup, styles and the logo are built in. The only outside requests are the two
@@ -7,15 +7,14 @@
  *
  * Embed (on the site's 401 password page):
  *   <script src="https://cdn.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js"
- *     data-slack="https://..." data-clickup="https://..."></script>
+ *     data-clickup="https://..."></script>
  *
  * Options, as data-* attributes on the script tag or as window.ZDPassword = {...} set before it:
- *   slack     Link for "Message us in Slack".
  *   clickup   Step 3 ClickUp link: a list (".../v/li/...", reads "Find the page's task in our
  *             ClickUp list.") or a task (".../t/...", reads "In the page's ClickUp task.").
+ *             Defaults to the ClickUp login page ("Find the page's task in ClickUp.").
  *             With JS config it can also be an object keyed by protected page path,
  *             e.g. { "/pricing": "https://...", "*": "https://..." }.
- *             Without a link, step 3 reads "In the ClickUp task we sent you."
  *   tutorial  Link for "Watch the tutorial (6 min)". Defaults to the Superflow Loom.
  *   heading, subheading, error   Copy overrides.
  */
@@ -24,7 +23,7 @@
   if (window.__zdPasswordPage) return;
   window.__zdPasswordPage = true;
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var FONTS = 'https://cdn.jsdelivr.net/npm/@fontsource/';
   var script = document.currentScript;
   var data = (script && script.dataset) || {};
@@ -50,12 +49,11 @@
   }
 
   var cfg = {
-    slack: safeUrl(opt('slack', 'https://app.slack.com/client')),
-    clickup: safeUrl(pickByPath(opt('clickup', null))),
+    clickup: safeUrl(pickByPath(opt('clickup', null)) || 'https://app.clickup.com/login'),
     tutorial: safeUrl(opt('tutorial', 'https://www.loom.com/share/9cd65d63e7954642994d00b63ebad806')),
     heading: opt('heading', 'Your page is ready for review'),
     subheading: opt('subheading', 'Unlock it, leave comments in Superflow, then send it back or accept it in ClickUp.'),
-    error: opt('error', 'That password didn’t work. Check it and try again, or ask us in Slack.')
+    error: opt('error', 'That password didn’t work. Check it and try again.')
   };
 
   /* ---------- Styles ---------- */
@@ -118,7 +116,6 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
 
 #zdpw .zdpw-form-area{width:100%;max-width:34rem;min-height:5.9rem}
 #zdpw .zdpw-label{display:block;margin:0 0 .5rem;font-size:.875rem;font-weight:500;line-height:1.5;color:#C4C8D4}
-#zdpw .zdpw-help{margin:0;text-align:center;font-size:1rem;line-height:1.5;color:#A7ADBE}
 
 /* Webflow's native password form, restyled in place */
 #zdpw .w-password-page.w-form{display:block;margin:0;padding:0;width:100%;max-width:none;min-width:0;text-align:left;background:none;border:0;box-shadow:none;position:static;transform:none}
@@ -240,7 +237,6 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
               '<p class="zdpw-step-title">Send it back or accept it</p><p class="zdpw-step-text" data-zdpw="clickup"></p></div></div></li>' +
         '</ol>' +
         '<div class="zdpw-form-area"><label class="zdpw-label">Page password</label></div>' +
-        '<p class="zdpw-help" data-zdpw="slack">Need the password? </p>' +
       '</main>' +
     '</div>';
 
@@ -276,23 +272,23 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
     }
 
     var cu = slot('clickup');
-    // Wording follows the link: a task (/t/...), a list (/v/li/...) or any other ClickUp view
+    // Wording follows the link: a task (/t/...), a list (/v/li/...) or anything else (the login page)
     var cuPath = cfg.clickup ? new URL(cfg.clickup).pathname : '';
     if (/^\/t\//.test(cuPath)) {
       cu.appendChild(document.createTextNode('In the page’s '));
       cu.appendChild(link(cfg.clickup, 'ClickUp task'));
       cu.appendChild(document.createTextNode('.'));
-    } else if (cfg.clickup) {
+    } else if (/\/v\/li\//.test(cuPath)) {
       cu.appendChild(document.createTextNode('Find the page’s task in our '));
-      cu.appendChild(link(cfg.clickup, /\/v\/li\//.test(cuPath) ? 'ClickUp list' : 'ClickUp'));
+      cu.appendChild(link(cfg.clickup, 'ClickUp list'));
+      cu.appendChild(document.createTextNode('.'));
+    } else if (cfg.clickup) {
+      cu.appendChild(document.createTextNode('Find the page’s task in '));
+      cu.appendChild(link(cfg.clickup, 'ClickUp'));
       cu.appendChild(document.createTextNode('.'));
     } else {
       cu.textContent = 'In the ClickUp task we sent you.';
     }
-
-    var help = slot('slack');
-    if (cfg.slack) help.appendChild(link(cfg.slack, 'Message us in Slack'));
-    else help.parentNode.removeChild(help);
 
     return root;
   }
