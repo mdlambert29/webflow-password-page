@@ -1,5 +1,5 @@
 /*!
- * Zanger Digital password page v1.3.0
+ * Zanger Digital password page v1.3.1
  * Draws the review-page password screen over a Webflow site's native password (401) page and moves
  * Webflow's own password form into it, so login still goes through Webflow (POST /.wf_auth).
  * Self-contained: markup, styles and the logo are built in. The only outside requests are the two
@@ -22,7 +22,7 @@
   if (window.__zdPasswordPage) return;
   window.__zdPasswordPage = true;
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.3.1';
   var FONTS = 'https://cdn.jsdelivr.net/npm/@fontsource/';
   var script = document.currentScript;
   var data = (script && script.dataset) || {};
@@ -119,18 +119,18 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
 /* Webflow's native password form, restyled in place */
 #zdpw .w-password-page.w-form{display:block;margin:0;padding:0;width:100%;max-width:none;min-width:0;text-align:left;background:none;border:0;box-shadow:none;position:static;transform:none}
 #zdpw form.w-password-page{display:flex;flex-direction:column;margin:0;padding:0;width:100%;max-width:none;background:none;border:0;box-shadow:none;gap:0}
-#zdpw form.w-password-page>:is(img,h1,h2,h3,h4,h5,h6,label,p){display:none}
+#zdpw form.w-password-page>:not(.zdpw-shell):not(.w-form-fail){display:none!important}
 #zdpw .w-password-page.w-form-fail{order:-1;margin:0 0 .625rem;padding:0;background:transparent;border:0;color:#F04438;font-family:inherit;font-size:.875rem;line-height:1.5;text-align:left}
 #zdpw .w-password-page.w-form-fail>div{display:flex;align-items:flex-start;gap:.5rem}
 #zdpw .w-password-page.w-form-fail>div::before{content:"";flex:none;width:18px;height:18px;margin-top:1px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F04438' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7.5v5M12 16.25v.01'/%3E%3C/svg%3E") no-repeat center/contain}
 #zdpw .zdpw-shell{display:flex;gap:.375rem;padding:.375rem;background:#0C1027;border:1px solid #6D7792;border-radius:16px}
 #zdpw .zdpw-shell:focus-within{outline:2px solid #4D65FF;outline-offset:2px}
 #zdpw .zdpw-field{position:relative;flex:1 1 auto;min-width:0}
-#zdpw input.w-password-page.w-input{display:block;width:100%;height:3.25rem;margin:0;padding:0 4.5rem 0 .75rem;background:transparent;border:0;border-radius:12px;box-shadow:none;color:#fff;font-family:inherit;font-size:1rem;line-height:normal}
+#zdpw input.w-password-page.w-input{display:block;position:static;opacity:1;visibility:visible;width:100%;height:3.25rem;margin:0;padding:0 4.5rem 0 .75rem;background:transparent;border:0;border-radius:12px;box-shadow:none;color:#fff;font-family:inherit;font-size:1rem;line-height:normal}
 #zdpw input.w-password-page.w-input:focus{outline:none}
 #zdpw input::-ms-reveal,#zdpw input::-ms-clear{display:none}
 #zdpw .zdpw-toggle{position:absolute;top:.25rem;right:.25rem;height:2.75rem;min-width:3.75rem;margin:0;padding:0 .75rem;background:transparent;border:0;border-radius:8px;color:#8ABFF5;font-family:inherit;font-size:.875rem;font-weight:600;line-height:1;cursor:pointer}
-#zdpw input.w-password-page.w-button{flex:none;min-width:10rem;width:auto;height:3.25rem;margin:0;padding:0 1.5rem;border:0;border-radius:12px;background:linear-gradient(180deg,#416CFD 0%,#083CE9 83%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.12);color:#fff;font-family:inherit;font-size:.9375rem;font-weight:600;line-height:1;cursor:pointer;-webkit-appearance:none;appearance:none;transition:background .4s cubic-bezier(.33,1,.68,1),color .4s cubic-bezier(.33,1,.68,1),transform .16s ease-out}
+#zdpw input.w-password-page.w-button{display:block;position:static;opacity:1;visibility:visible;flex:none;min-width:10rem;width:auto;height:3.25rem;margin:0;padding:0 1.5rem;border:0;border-radius:12px;background:linear-gradient(180deg,#416CFD 0%,#083CE9 83%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.12);color:#fff;font-family:inherit;font-size:.9375rem;font-weight:600;line-height:1;cursor:pointer;-webkit-appearance:none;appearance:none;transition:background .4s cubic-bezier(.33,1,.68,1),color .4s cubic-bezier(.33,1,.68,1),transform .16s ease-out}
 #zdpw input.w-password-page.w-button:active{transform:scale(.97)}
 #zdpw .is-error .zdpw-shell{border-color:#F04438;box-shadow:0 0 0 3px rgba(240,68,56,.18)}
 #zdpw a:focus-visible,#zdpw button:focus-visible,#zdpw input.w-button:focus-visible{outline:2px solid #4D65FF;outline-offset:3px}
@@ -295,12 +295,15 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
     root.querySelector('.zdpw-label').htmlFor = input.id;
     form.setAttribute('aria-label', 'Unlock page');
 
-    // One shell around field and button, as in the design
+    // One shell around field and button, as in the design. Sites often nest the field and button in
+    // their own wrappers, so the shell and error message go straight into the form, and CSS hides
+    // whatever else the site's form holds (its own buttons, links, headings).
     var shell = document.createElement('div');
     shell.className = 'zdpw-shell';
     var field = document.createElement('div');
     field.className = 'zdpw-field';
-    form.insertBefore(shell, input);
+    form.insertBefore(shell, form.firstChild);
+    if (fail) form.insertBefore(fail, shell);
     shell.appendChild(field);
     field.appendChild(input);
     shell.appendChild(submit);
@@ -345,17 +348,31 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
     var submit = form && form.querySelector('input[type="submit"]');
     // The hidden "page" field comes last; wait for it so the whole form is parsed before it moves
     var parsed = form && form.querySelector('input[name="page"]');
+    if (failed || document.getElementById('zdpw')) return true;
     if (!input || !submit || (!parsed && !force)) return false;
-    if (document.getElementById('zdpw')) return true;
 
-    var root = build();
-    adoptForm(root, wrap, form, input, submit);
-    document.body.appendChild(root);
-    document.documentElement.classList.add('zdpw-on');
+    var root;
+    try {
+      root = build();
+      adoptForm(root, wrap, form, input, submit);
+      document.body.appendChild(root);
+      document.documentElement.classList.add('zdpw-on');
+    } catch (e) {
+      // Fail open: leave the site's own password page showing and never retry. (Retrying from the
+      // MutationObserver re-triggers itself and hangs the page.)
+      failed = true;
+      if (root && root.parentNode) root.parentNode.removeChild(root);
+      document.documentElement.classList.remove('zdpw-on');
+      reveal();
+      if (window.console) console.warn('[zd-password] Could not draw the password page, showing the default one.', e);
+      return true;
+    }
     reveal();
     if (!/Mobi|Android/i.test(navigator.userAgent) || /[?&]e=1(&|$)/.test(location.search)) input.focus();
     return true;
   }
+
+  var failed = false;
 
   function reveal() {
     document.documentElement.classList.remove('zdpw-wait');

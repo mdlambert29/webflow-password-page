@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- Regression page: a client 401 whose password form nests the field and button in its own wrapper,
+     hides the real submit behind a fake button, and adds extra links (structure copied from a live
+     client site). v1.3.0 hung this page in an endless MutationObserver loop. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Protected page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .w-form-fail{display:none}
+    body{margin:0;font-family:Montserrat,Arial,sans-serif}
+    .pw_form-wrap{display:grid;grid-template-columns:1fr auto}
+    .pw_submit{display:none}
+    .pw_button{background:#f33;color:#fff;padding:12px 20px;cursor:pointer}
+    .pw_input{border:1px solid #333;padding:12px;border-radius:999px}
+  </style>
+  <script src="/zd-password.js" data-clickup="https://app.clickup.com/8666121/v/li/901112854639"></script>
+</head>
+<body>
+<div class="pw_light-contents-container w-password-page w-form"><form action="/.wf_auth" method="post" id="email-form" name="email-form" data-name="Email Form" class="pw_light-contents-inner w-password-page" data-wf-page-id="698e357d5692c972dc8cc063" data-wf-element-id="60d3fa3a5a19c1169cd58c4100000000000c"><div class="pw_margin-bottom small-medium"><h2 class="pw_secondary-header">Enter Your Password For Page Access</h2></div><div class="pw_form-wrap"><input class="pw_input w-password-page w-input" autofocus="true" maxlength="256" name="pass" data-name="field" placeholder="Enter your password" type="password" id="pass"/><div fs-mirrorclick-element="trigger" id="w-node-_8279bce0-8016-719c-2e56-404123c0663e-dc8cc063" class="pw_button"><img alt="Lock Icon" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" class="pw_button-icon"/><div class="pw_button-text">Unlock Page</div></div><div id="w-node-_8279bce0-8016-719c-2e56-404123c06642-dc8cc063" class="pw_submit"></div><input type="submit" data-wait="Please wait..." class="pw_submit w-password-page w-button" value="Submit"/></div><div class="pw_error-wrap-outer w-password-page w-form-fail"><div class="pw_error-wrap"><img alt="Error Icon" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" class="pw_icon-1x1-medium"/><div class="pw_bold">Wrong Password. Please try again.</div></div></div><div class="pw_margin-bottom small"><div class="pw_margin-top medium"><div class="pw_ani-trigger"><a href="#" class="pw_link-wrap w-inline-block"><div class="pw_bold">Have A Question?</div><div class="pw_arrow-wrap"><div class="pw_arrow">Go To Our Slack Channel</div><div class="pw_arrow-space"></div><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" loading="lazy" alt="Forward Arrow" class="pw_arrow-icon"/></div></a></div></div></div><div class="pw_ani-trigger"><a href="#" class="pw_link-wrap w-inline-block"><div class="pw_bold">Need To Track This Task?</div><div class="pw_arrow-wrap"><div class="pw_arrow">Go To ClickUp</div><div class="pw_arrow-space"></div><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" loading="lazy" alt="Forward Arrow" class="pw_arrow-icon"/></div></a></div><div style="display:none" class="w-password-page w-embed w-script"><input type="hidden" name="path" value="/demo-protected" /><input type="hidden" name="page" value="/demo-protected" /></div><div style="display:none" class="w-password-page w-embed w-script"><script type="application/javascript">(function _handlePasswordPageOnload() {
+	  if (/[?&]e=1(&|$)/.test(document.location.search)) {
+	    document.querySelector('.w-password-page.w-form-fail').style.display = 'block';
+	  }
+	})()</script></div></form></div>
+</body>
+</html>

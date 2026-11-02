@@ -83,6 +83,13 @@ you move them.
 node demo/server.js
 ```
 
-Open http://localhost:4173 (script in `<head>`, data attributes) or
-http://localhost:4173/demo/footer.html (script at end of body, JS config). Test password: `review`.
-Anything else redirects with `?e=1`, like Webflow.
+Test password: `review`. Anything else redirects with `?e=1`, like Webflow.
+
+- http://localhost:4173: Webflow's default form, script in `<head>` with data attributes.
+- http://localhost:4173/demo/footer.html: script at the end of the body, JS config.
+- http://localhost:4173/demo/nested.html: a customized client form (field and button inside the
+  site's own wrapper, a fake button, extra links), copied from a live client site. Check this one
+  after any change to how the form is adopted.
+
+If the script ever fails on a site's form, it logs `[zd-password] Could not draw the password page`
+in the console and leaves the site's own password page in place.
