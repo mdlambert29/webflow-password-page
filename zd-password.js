@@ -6,7 +6,7 @@
  * pinned Fontsource font files on jsDelivr.
  *
  * Embed (on the site's 401 password page):
- *   <script src="https://cdn.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js"
+ *   <script src="https://mdlambert29.github.io/webflow-password-page/zd-password.js"
  *     data-clickup="https://..."></script>
  *
  * Options, as data-* attributes on the script tag or as window.ZDPassword = {...} set before it:

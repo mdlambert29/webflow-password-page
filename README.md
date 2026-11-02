@@ -14,7 +14,7 @@ In the Webflow Designer, open the site's **Password** utility page (`/401`), add
 first element in the body, and paste:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js"
+<script src="https://mdlambert29.github.io/webflow-password-page/zd-password.js"
   data-clickup="https://app.clickup.com/8666121/v/li/LIST_ID"></script>
 ```
 
@@ -47,22 +47,28 @@ JS form and map them by path (the protected page's URL stays in the address bar 
     }
   };
 </script>
-<script src="https://cdn.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js"></script>
+<script src="https://mdlambert29.github.io/webflow-password-page/zd-password.js"></script>
 ```
 
 ## Hosting on GitHub
 
-1. Create a **public** GitHub repo (jsDelivr only serves public repos) and push this folder.
-2. Tag a release: `git tag v1.0.0 && git push --tags`.
-3. Use `https://cdn.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js` in the embed. jsDelivr minifies
-   `.min.js` automatically, and `@1` follows the newest `v1.x.x` tag.
+The script is served by GitHub Pages from the `main` branch of this public repo:
+`https://mdlambert29.github.io/webflow-password-page/zd-password.js`.
 
-To ship a change to every site: edit `zd-password.js`, bump `VERSION` in it, then tag `v1.0.1` (etc.)
-and push. jsDelivr's CDN can keep serving the old `@1` copy for up to 12 hours; open
-`https://purge.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js` once to update it
-right away. Visitors' browsers may still hold the old copy for up to 7 days (jsDelivr's browser cache
-for `@1`); a hard refresh clears it. For a breaking change, tag `v2.0.0`, so sites stay on `@1` until
-you move them.
+**Every push to `main` goes live on every client site** within about a minute (Pages rebuild), plus up
+to 10 minutes for visitors' browsers to drop their cached copy (Pages sends `Cache-Control: max-age=600`).
+So before pushing:
+
+1. Edit `zd-password.js` and bump `VERSION` in it.
+2. Test all three demo pages (see below), including `demo/nested.html`.
+3. Commit, tag the version (`git tag v1.3.2`) and push `main` and the tag.
+
+To roll back, revert the commit and push. A tagged version stays available at
+`https://cdn.jsdelivr.net/gh/mdlambert29/webflow-password-page@1.3.1/zd-password.min.js` if one site ever
+needs to be pinned.
+
+Why not jsDelivr's `@1` URL: it tells browsers to cache the file for 7 days, so a broken release stays in
+visitors' browsers for up to a week even after a fix and a CDN purge.
 
 ## How it hooks into Webflow
 
