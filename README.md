@@ -30,11 +30,11 @@ Set as `data-*` attributes on the script tag, or as `window.ZDPassword = {...}` 
 
 | Option | Default | What it does |
 | --- | --- | --- |
-| `clickup` | `https://app.clickup.com/login` | Step 3 link. A list link (`.../v/li/...`) reads "Find the page's task in our ClickUp list." A task link (`.../t/...`) reads "In the page's ClickUp task." Any other link, including the default login page, reads "Find the page's task in ClickUp." |
+| `clickup` | `https://app.clickup.com/login` | Link on "ClickUp" in step 3, which reads "Open the task in ClickUp." Use any ClickUp URL, e.g. the client's list. |
 | `tutorial` | Superflow Loom | "Watch the tutorial (6 min)" link. |
 | `heading`, `subheading`, `error` | design copy | Copy overrides. |
 
-One 401 page serves every protected page on a site, so for different ClickUp lists or tasks per page use the
+One 401 page serves every protected page on a site, so for different ClickUp links per page use the
 JS form and map them by path (the protected page's URL stays in the address bar on the 401 page):
 
 ```html

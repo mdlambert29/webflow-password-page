@@ -1,5 +1,5 @@
 /*!
- * Zanger Digital password page v1.2.0
+ * Zanger Digital password page v1.3.0
  * Draws the review-page password screen over a Webflow site's native password (401) page and moves
  * Webflow's own password form into it, so login still goes through Webflow (POST /.wf_auth).
  * Self-contained: markup, styles and the logo are built in. The only outside requests are the two
@@ -10,9 +10,8 @@
  *     data-clickup="https://..."></script>
  *
  * Options, as data-* attributes on the script tag or as window.ZDPassword = {...} set before it:
- *   clickup   Step 3 ClickUp link: a list (".../v/li/...", reads "Find the page's task in our
- *             ClickUp list.") or a task (".../t/...", reads "In the page's ClickUp task.").
- *             Defaults to the ClickUp login page ("Find the page's task in ClickUp.").
+ *   clickup   Link on "ClickUp" in step 3 ("Open the task in ClickUp."), e.g. the client's list.
+ *             Defaults to the ClickUp login page.
  *             With JS config it can also be an object keyed by protected page path,
  *             e.g. { "/pricing": "https://...", "*": "https://..." }.
  *   tutorial  Link for "Watch the tutorial (6 min)". Defaults to the Superflow Loom.
@@ -23,7 +22,7 @@
   if (window.__zdPasswordPage) return;
   window.__zdPasswordPage = true;
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var FONTS = 'https://cdn.jsdelivr.net/npm/@fontsource/';
   var script = document.currentScript;
   var data = (script && script.dataset) || {};
@@ -49,7 +48,7 @@
   }
 
   var cfg = {
-    clickup: safeUrl(pickByPath(opt('clickup', null)) || 'https://app.clickup.com/login'),
+    clickup: safeUrl(pickByPath(opt('clickup', null))) || 'https://app.clickup.com/login',
     tutorial: safeUrl(opt('tutorial', 'https://www.loom.com/share/9cd65d63e7954642994d00b63ebad806')),
     heading: opt('heading', 'Your page is ready for review'),
     subheading: opt('subheading', 'Unlock it, leave comments in Superflow, then send it back or accept it in ClickUp.'),
@@ -272,23 +271,9 @@ html.zdpw-on body>:not(#zdpw){display:none!important}
     }
 
     var cu = slot('clickup');
-    // Wording follows the link: a task (/t/...), a list (/v/li/...) or anything else (the login page)
-    var cuPath = cfg.clickup ? new URL(cfg.clickup).pathname : '';
-    if (/^\/t\//.test(cuPath)) {
-      cu.appendChild(document.createTextNode('In the page’s '));
-      cu.appendChild(link(cfg.clickup, 'ClickUp task'));
-      cu.appendChild(document.createTextNode('.'));
-    } else if (/\/v\/li\//.test(cuPath)) {
-      cu.appendChild(document.createTextNode('Find the page’s task in our '));
-      cu.appendChild(link(cfg.clickup, 'ClickUp list'));
-      cu.appendChild(document.createTextNode('.'));
-    } else if (cfg.clickup) {
-      cu.appendChild(document.createTextNode('Find the page’s task in '));
-      cu.appendChild(link(cfg.clickup, 'ClickUp'));
-      cu.appendChild(document.createTextNode('.'));
-    } else {
-      cu.textContent = 'In the ClickUp task we sent you.';
-    }
+    cu.appendChild(document.createTextNode('Open the task in '));
+    cu.appendChild(link(cfg.clickup, 'ClickUp'));
+    cu.appendChild(document.createTextNode('.'));
 
     return root;
   }
