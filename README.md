@@ -58,9 +58,11 @@ JS form and map them by path (the protected page's URL stays in the address bar 
    `.min.js` automatically, and `@1` follows the newest `v1.x.x` tag.
 
 To ship a change to every site: edit `zd-password.js`, bump `VERSION` in it, then tag `v1.0.1` (etc.)
-and push. jsDelivr can cache `@1` for up to a day; to make it immediate, open
-`https://purge.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js` once. For a breaking change, tag
-`v2.0.0`, so sites stay on `@1` until you move them.
+and push. jsDelivr's CDN can keep serving the old `@1` copy for up to 12 hours; open
+`https://purge.jsdelivr.net/gh/mdlambert29/webflow-password-page@1/zd-password.min.js` once to update it
+right away. Visitors' browsers may still hold the old copy for up to 7 days (jsDelivr's browser cache
+for `@1`); a hard refresh clears it. For a breaking change, tag `v2.0.0`, so sites stay on `@1` until
+you move them.
 
 ## How it hooks into Webflow
 
